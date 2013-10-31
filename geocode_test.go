@@ -22,6 +22,17 @@ func TestLookup(t *testing.T) {
 	}
 }
 
+func TestLookupWithGoogleCredential(t *testing.T) {
+	req := &Request{
+		Address:      "New York City",
+		Googleclient: "secret",
+	}
+	uri := req.GetUri()
+	if uri != "/maps/api/geocode/json?address=New+York+City&client=secret&sensor=false" {
+		t.Fatalf("Wrong response: %v", uri)
+	}
+}
+
 func TestLookupWithBounds(t *testing.T) {
 	req := &Request{
 		Address: "Winnetka",
