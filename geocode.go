@@ -123,6 +123,12 @@ func (r *Request) Values() url.Values {
 		if r.Language != "" {
 			v.Set("language", r.Language)
 		}
+		if r.Googleclient != "" {
+			v.Set("client", r.Googleclient)
+		}
+		if r.Googlesignature != "" && r.Googleclient != "" {
+			v.Set("signature", r.Googlesignature)
+		}
 		v.Set("sensor", strconv.FormatBool(r.Sensor))
 	case OSM:
 		v.Set("limit", strconv.FormatInt(r.Limit, 10))
@@ -140,15 +146,6 @@ func (r *Request) Values() url.Values {
 		v.Set("instructions", "1") // enbles/disables adding driving instructions in the output.
 		v.Set("lang", "en_US")     // specifies the language code in which the routing directions are returned.
 	}
-
-	if r.Googleclient != "" {
-		v.Set("client", r.Googleclient)
-	}
-	if r.Googlesignature != "" && r.Googleclient != "" {
-		v.Set("signature", r.Googlesignature)
-	}
-	v.Set("sensor", strconv.FormatBool(r.Sensor))
-
 	return v
 }
 
@@ -220,6 +217,8 @@ func (r *Request) SendAPIRequest(transport http.RoundTripper) (*Response, error)
 	return resp, nil
 }
 
+// Return the uri and the encoded parameters
+// necessary if you need to sign your request
 func (r *Request) GetGoogleUri() string {
 	if r == nil {
 		panic("Lookup on nil *Request")
