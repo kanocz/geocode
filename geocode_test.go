@@ -6,6 +6,7 @@ func TestLookup(t *testing.T) {
 	req := &Request{
 		Address:  "New York City",
 		Provider: GOOGLE,
+		Type:     GEOCODE,
 	}
 	resp, err := req.Lookup(nil)
 	if err != nil {
@@ -25,10 +26,12 @@ func TestLookup(t *testing.T) {
 
 func TestLookupWithGoogleCredential(t *testing.T) {
 	req := &Request{
+		Provider:     GOOGLE,
+		Type:         GEOCODE,
 		Address:      "New York City",
 		Googleclient: "secret",
 	}
-	uri := req.GetUri()
+	uri := req.GetGoogleUri()
 	if uri != "/maps/api/geocode/json?address=New+York+City&client=secret&sensor=false" {
 		t.Fatalf("Wrong response: %v", uri)
 	}
