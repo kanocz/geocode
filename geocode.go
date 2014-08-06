@@ -12,9 +12,6 @@ import (
 	"strconv"
 )
 
-const api = "http://maps.googleapis.com/maps/api/geocode/json"
-const uri = "/maps/api/geocode/json"
-
 type (
 	RequestType         int
 	ProviderApiLocation string
@@ -26,8 +23,9 @@ const (
 	ROUTE   RequestType = 2
 
 	/* Geocoding URLs */
-	GOOGLE = "http://maps.googleapis.com/maps/api/geocode/json"
-	OSM    = "http://open.mapquestapi.com/nominatim/v1/reverse.php"
+	GOOGLEURI = "/maps/api/geocode/json"
+	GOOGLE    = "http://maps.googleapis.com" + GOOGLEURI
+	OSM       = "http://open.mapquestapi.com/nominatim/v1/reverse.php"
 
 	/* Routing URLs */
 	YOURS        = "http://www.yournavigation.org/api/1.0/gosmore.php"
@@ -222,12 +220,11 @@ func (r *Request) SendAPIRequest(transport http.RoundTripper) (*Response, error)
 	return resp, nil
 }
 
-func (r *Request) GetUri() string {
+func (r *Request) GetGoogleUri() string {
 	if r == nil {
 		panic("Lookup on nil *Request")
 	}
-	u := fmt.Sprintf("%s?%s", uri, r.Values().Encode())
-	return u
+	return fmt.Sprintf("%s?%s", GOOGLEURI, r.Values().Encode())
 }
 
 type Response struct {
