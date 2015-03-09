@@ -20,9 +20,10 @@ type Request struct {
 	Location *Point
 
 	// Optional fields.
-	Bounds   *Bounds // Lookup within this viewport.
-	Region   string
-	Language string
+	Bounds     *Bounds // Lookup within this viewport.
+	Region     string
+	Language   string
+	Components string
 
 	Sensor bool
 
@@ -53,6 +54,9 @@ func (r *Request) Values() url.Values {
 	}
 	if r.Language != "" {
 		v.Set("language", r.Language)
+	}
+	if r.Components != "" {
+		v.Set("components", r.Components)
 	}
 	if r.Googleclient != "" {
 		v.Set("client", r.Googleclient)
