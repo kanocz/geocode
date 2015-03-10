@@ -109,25 +109,26 @@ type Response struct {
 type Result struct {
 	Address      string         `json:"formatted_address"`
 	AddressParts []*AddressPart `json:"address_components"`
-	Geometry     *Geometry
-	Types        []string
+	Geometry     *Geometry      `json:"geometry"`
+	Types        []string       `json:"types"`
 }
 
 type AddressPart struct {
-	Name      string `json:"long_name"`
-	ShortName string `json:"short_name"`
-	Types     []string
+	Name      string   `json:"long_name"`
+	ShortName string   `json:"short_name"`
+	Types     []string `json:"types"`
 }
 
 type Geometry struct {
-	Bounds   Bounds
-	Location Point
-	Type     string
-	Viewport Bounds
+	Bounds   Bounds `json:"bounds"`
+	Location Point  `json:"location"`
+	Type     string `json:"location_type"`
+	Viewport Bounds `json:"viewport"`
 }
 
 type Bounds struct {
-	NorthEast, SouthWest Point
+	NorthEast Point `json:"northeast"`
+	SouthWest Point `json:"southwest"`
 }
 
 func (b Bounds) String() string {
@@ -135,7 +136,8 @@ func (b Bounds) String() string {
 }
 
 type Point struct {
-	Lat, Lng float64
+	Lat float64 `json:"lat"`
+	Lng float64 `json:"lng"`
 }
 
 func (p Point) String() string {
