@@ -44,7 +44,9 @@ func (r *Request) Values() url.Values {
 	} else if r.Location != nil {
 		v.Set("latlng", r.Location.String())
 	} else {
-		panic("neither Address nor Location set")
+		// well, the request will probably fail
+		// let's return an empty string?
+		return v
 	}
 	if r.Bounds != nil {
 		v.Set("bounds", r.Bounds.String())
@@ -73,7 +75,11 @@ func (r *Request) Values() url.Values {
 // the provided transport (or http.DefaultTransport if nil).
 func (r *Request) Lookup(transport http.RoundTripper) (*Response, error) {
 	c := http.Client{Transport: transport}
-	u := fmt.Sprintf("%s?%s", api, r.Values().Encode())
+	params := r.Values().Encode()
+	if len(params) == 0 {
+		return nil, fmt.Errorf("Missing address or latlng argument")
+	}
+	u := fmt.Sprintf("%s?%s", api, params)
 	getResp, err := c.Get(u)
 	if err != nil {
 		return nil, err
