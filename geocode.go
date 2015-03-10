@@ -72,10 +72,6 @@ func (r *Request) Values() url.Values {
 // Lookup makes the Request to the Google Geocoding API servers using
 // the provided transport (or http.DefaultTransport if nil).
 func (r *Request) Lookup(transport http.RoundTripper) (*Response, error) {
-	if r == nil {
-		panic("Lookup on nil *Request")
-	}
-
 	c := http.Client{Transport: transport}
 	u := fmt.Sprintf("%s?%s", api, r.Values().Encode())
 	getResp, err := c.Get(u)
@@ -94,9 +90,6 @@ func (r *Request) Lookup(transport http.RoundTripper) (*Response, error) {
 }
 
 func (r *Request) GetUri() string {
-	if r == nil {
-		panic("Lookup on nil *Request")
-	}
 	u := fmt.Sprintf("%s?%s", uri, r.Values().Encode())
 	return u
 }
