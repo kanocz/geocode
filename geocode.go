@@ -111,8 +111,8 @@ type Result struct {
 	AddressParts []*AddressPart `json:"address_components"`
 	Geometry     *Geometry      `json:"geometry"`
 	Types        []string       `json:"types"`
-	PartialMatch bool           `json:"partial_match"`
-	PlaceId      string         `json:"place_id"`
+	PartialMatch bool           `json:"partial_match,omitempty"`
+	PlaceId      string         `json:"place_id,omitempty"`
 }
 
 type AddressPart struct {
