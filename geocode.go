@@ -111,6 +111,8 @@ type Result struct {
 	AddressParts []*AddressPart `json:"address_components"`
 	Geometry     *Geometry      `json:"geometry"`
 	Types        []string       `json:"types"`
+	PartialMatch bool           `json:"partial_match"`
+	PlaceId      string         `json:"place_id"`
 }
 
 type AddressPart struct {
@@ -120,7 +122,7 @@ type AddressPart struct {
 }
 
 type Geometry struct {
-	Bounds   Bounds `json:"bounds"`
+	Bounds   *Bounds `json:"bounds,omitempty"`
 	Location Point  `json:"location"`
 	Type     string `json:"location_type"`
 	Viewport Bounds `json:"viewport"`
