@@ -44,7 +44,9 @@ func (r *Request) Values() url.Values {
 	} else if r.Location != nil {
 		v.Set("latlng", r.Location.String())
 	} else {
-		panic("neither Address nor Location set")
+		// well, the request will probably fail
+		// let's return an empty string?
+		return v
 	}
 	if r.Bounds != nil {
 		v.Set("bounds", r.Bounds.String())
@@ -72,12 +74,12 @@ func (r *Request) Values() url.Values {
 // Lookup makes the Request to the Google Geocoding API servers using
 // the provided transport (or http.DefaultTransport if nil).
 func (r *Request) Lookup(transport http.RoundTripper) (*Response, error) {
-	if r == nil {
-		panic("Lookup on nil *Request")
-	}
-
 	c := http.Client{Transport: transport}
-	u := fmt.Sprintf("%s?%s", api, r.Values().Encode())
+	params := r.Values().Encode()
+	if len(params) == 0 {
+		return nil, fmt.Errorf("Missing address or latlng argument")
+	}
+	u := fmt.Sprintf("%s?%s", api, params)
 	getResp, err := c.Get(u)
 	if err != nil {
 		return nil, err
@@ -94,9 +96,6 @@ func (r *Request) Lookup(transport http.RoundTripper) (*Response, error) {
 }
 
 func (r *Request) GetUri() string {
-	if r == nil {
-		panic("Lookup on nil *Request")
-	}
 	u := fmt.Sprintf("%s?%s", uri, r.Values().Encode())
 	return u
 }
