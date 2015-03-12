@@ -102,8 +102,8 @@ func (r *Request) GetUri() string {
 }
 
 type Response struct {
-	Status  string
-	Results []*Result
+	Status  string    `json:"status"`
+	Results []*Result `json:"results"`
 }
 
 type Result struct {
@@ -123,9 +123,9 @@ type AddressPart struct {
 
 type Geometry struct {
 	Bounds   *Bounds `json:"bounds,omitempty"`
-	Location Point  `json:"location"`
-	Type     string `json:"location_type"`
-	Viewport Bounds `json:"viewport"`
+	Location Point   `json:"location"`
+	Type     string  `json:"location_type"`
+	Viewport Bounds  `json:"viewport"`
 }
 
 type Bounds struct {
