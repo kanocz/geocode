@@ -24,6 +24,7 @@ type Request struct {
 	Region     string
 	Language   string
 	Components string
+	Channel    string
 
 	Sensor bool
 
@@ -47,6 +48,9 @@ func (r *Request) Values() url.Values {
 		// well, the request will probably fail
 		// let's return an empty string?
 		return v
+	}
+	if r.Channel != "" {
+		v.Set("channel", r.Channel)
 	}
 	if r.Bounds != nil {
 		v.Set("bounds", r.Bounds.String())
