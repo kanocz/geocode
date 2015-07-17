@@ -93,7 +93,7 @@ func (r *Request) Lookup(transport http.RoundTripper) (*Response, error) {
 
 	if getResp.StatusCode < 200 || getResp.StatusCode >= 300 {
 		body, _ := ioutil.ReadAll(getResp.Body)
-		return nil, fmt.Errorf("Failed to lookup address (code %d): %s", getResp.Status, body)
+		return nil, fmt.Errorf("Failed to lookup address (code %d): %s", getResp.StatusCode, body)
 	}
 
 	resp := new(Response)
@@ -106,7 +106,7 @@ func (r *Request) Lookup(transport http.RoundTripper) (*Response, error) {
 	case "OK", "ZERO_RESULTS":
 		return resp, nil
 	default:
-		return nil, fmt.Errorf("Lookup failed: %s", resp.Status)
+		return nil, fmt.Errorf("Lookup failed (%s): %s", resp.Status, resp.ErrorMessage)
 	}
 }
 
