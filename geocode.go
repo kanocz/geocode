@@ -102,7 +102,12 @@ func (r *Request) Lookup(transport http.RoundTripper) (*Response, error) {
 		return nil, err
 	}
 
-	return resp, nil
+	switch resp.Status {
+	case "OK", "ZERO_RESULTS":
+		return resp, nil
+	default:
+		return nil, fmt.Errorf("Lookup failed: %s", resp.Status)
+	}
 }
 
 func (r *Request) GetUri() string {
