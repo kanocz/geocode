@@ -116,8 +116,9 @@ func (r *Request) GetUri() string {
 }
 
 type Response struct {
-	Status  string    `json:"status"`
-	Results []*Result `json:"results"`
+	Status       string    `json:"status"`
+	ErrorMessage string    `json:"error_message"`
+	Results      []*Result `json:"results"`
 }
 
 type Result struct {
