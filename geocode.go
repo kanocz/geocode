@@ -6,6 +6,7 @@ package geocode
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -89,6 +90,11 @@ func (r *Request) Lookup(transport http.RoundTripper) (*Response, error) {
 		return nil, err
 	}
 	defer getResp.Body.Close()
+
+	if getResp.StatusCode < 200 || getResp.StatusCode >= 300 {
+		body, _ := ioutil.ReadAll(getResp.Body)
+		return nil, fmt.Errorf("Failed to lookup address (code %d): %s", getResp.Status, body)
+	}
 
 	resp := new(Response)
 	err = json.NewDecoder(getResp.Body).Decode(resp)
