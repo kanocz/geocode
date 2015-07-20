@@ -103,10 +103,10 @@ func (r *Request) Lookup(transport http.RoundTripper) (*Response, error) {
 	}
 
 	switch resp.Status {
-	case "OK", "ZERO_RESULTS":
-		return resp, nil
-	default:
+	case "OVER_QUERY_LIMIT", "REQUEST_DENIED", "INVALID_REQUEST", "UNKNOWN_ERROR":
 		return nil, fmt.Errorf("Lookup failed (%s): %s", resp.Status, resp.ErrorMessage)
+	default:
+		return resp, nil
 	}
 }
 
