@@ -13,7 +13,6 @@ import (
 )
 
 const api = "http://maps.googleapis.com/maps/api/geocode/json"
-const uri = "/maps/api/geocode/json"
 
 type Request struct {
 	// One (and only one) of these must be set.
@@ -32,6 +31,7 @@ type Request struct {
 	// Google credential
 	Googleclient    string
 	Googlesignature string
+	Googleapikey    string
 
 	values url.Values
 }
@@ -71,6 +71,10 @@ func (r *Request) Values() url.Values {
 	if r.Googlesignature != "" && r.Googleclient != "" {
 		v.Set("signature", r.Googlesignature)
 	}
+	if r.Googleapikey != "" && (r.Googleclient == "") {
+		v.Set("key", r.Googleapikey)
+	}
+
 	v.Set("sensor", strconv.FormatBool(r.Sensor))
 
 	return v
@@ -108,11 +112,6 @@ func (r *Request) Lookup(transport http.RoundTripper) (*Response, error) {
 	default:
 		return resp, nil
 	}
-}
-
-func (r *Request) GetUri() string {
-	u := fmt.Sprintf("%s?%s", uri, r.Values().Encode())
-	return u
 }
 
 type Response struct {
