@@ -159,3 +159,55 @@ type Point struct {
 func (p Point) String() string {
 	return fmt.Sprintf("%g,%g", p.Lat, p.Lng)
 }
+
+type Address struct {
+	AddrStr  string  `json:"address"`
+	Number   string  `json:"number"`
+	Premise  string  `json:"premise"`
+	Street   string  `json:"street"`
+	City     string  `json:"city"`
+	Country  string  `json:"country"`
+	Postcode string  `json:"postcode"`
+	Lat      float64 `json:"lat"`
+	Lng      float64 `json:"lng"`
+}
+
+// Parse is simple function that returns geocode addresses in parsed format
+func (r *Response) Parse() []Address {
+	if r.Status != "OK" {
+		return nil
+	}
+
+	result := make([]Address, 0, len(r.Results))
+
+	for _, re := range r.Results {
+		addr := Address{}
+
+		addr.AddrStr = re.Address
+		addr.Lat = re.Geometry.Location.Lat
+		addr.Lng = re.Geometry.Location.Lng
+
+		for _, part := range re.AddressParts {
+			for _, partType := range part.Types {
+				switch partType {
+				case "premise":
+					addr.Premise = part.Name
+				case "street_number":
+					addr.Number = part.Name
+				case "route":
+					addr.Street = part.ShortName
+				case "locality":
+					addr.City = part.Name
+				case "country":
+					addr.Country = part.ShortName
+				case "postal_code":
+					addr.Postcode = part.Name
+				}
+			}
+		}
+
+		result = append(result, addr)
+	}
+
+	return result
+}
