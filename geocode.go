@@ -198,6 +198,8 @@ func (r *Response) Parse() []Address {
 					addr.Street = part.ShortName
 				case "locality":
 					addr.City = part.Name
+				case "postal_town":
+					addr.City = part.Name
 				case "country":
 					addr.Country = part.ShortName
 				case "postal_code":
