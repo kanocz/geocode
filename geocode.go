@@ -161,16 +161,17 @@ func (p Point) String() string {
 }
 
 type Address struct {
-	PlaceID  string  `json:"placeId"`
-	AddrStr  string  `json:"address"`
-	Number   string  `json:"number"`
-	Premise  string  `json:"premise"`
-	Street   string  `json:"street"`
-	City     string  `json:"city"`
-	Country  string  `json:"country"`
-	Postcode string  `json:"postcode"`
-	Lat      float64 `json:"lat"`
-	Lng      float64 `json:"lng"`
+	PlaceID      string  `json:"placeId"`
+	PartialMatch bool    `json:"partial_match,omitempty"`
+	AddrStr      string  `json:"address"`
+	Number       string  `json:"number"`
+	Premise      string  `json:"premise"`
+	Street       string  `json:"street"`
+	City         string  `json:"city"`
+	Country      string  `json:"country"`
+	Postcode     string  `json:"postcode"`
+	Lat          float64 `json:"lat"`
+	Lng          float64 `json:"lng"`
 }
 
 // Parse is simple function that returns geocode addresses in parsed format
@@ -190,6 +191,7 @@ func (r *Response) Parse(includePartialMatch bool) []Address {
 
 		addr.AddrStr = re.Address
 		addr.PlaceID = re.PlaceId
+		addr.PartialMatch = re.PartialMatch
 		addr.Lat = re.Geometry.Location.Lat
 		addr.Lng = re.Geometry.Location.Lng
 
