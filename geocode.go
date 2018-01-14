@@ -161,6 +161,7 @@ func (p Point) String() string {
 }
 
 type Address struct {
+	PlaceID  string  `json:"placeId"`
 	AddrStr  string  `json:"address"`
 	Number   string  `json:"number"`
 	Premise  string  `json:"premise"`
@@ -184,6 +185,7 @@ func (r *Response) Parse() []Address {
 		addr := Address{}
 
 		addr.AddrStr = re.Address
+		addr.PlaceID = re.PlaceId
 		addr.Lat = re.Geometry.Location.Lat
 		addr.Lng = re.Geometry.Location.Lng
 
