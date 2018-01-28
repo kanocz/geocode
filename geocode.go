@@ -175,7 +175,7 @@ type Address struct {
 }
 
 // Parse is simple function that returns geocode addresses in parsed format
-func (r *Response) Parse(includePartialMatch bool) []Address {
+func (r *Response) Parse(includePartialMatch bool, requireNumber bool) []Address {
 	if r.Status != "OK" {
 		return nil
 	}
@@ -214,6 +214,10 @@ func (r *Response) Parse(includePartialMatch bool) []Address {
 					addr.Postcode = part.Name
 				}
 			}
+		}
+
+		if requireNumber && "" == addr.Number && "" == addr.Premise {
+			continue
 		}
 
 		result = append(result, addr)
